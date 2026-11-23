@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Japan 47 Prefectures Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=Shippori+Mincho:wght@700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: เบาๆ เป็นระเบียบ เหมือนสมุดสะสมตราประทับเดินทาง
+   IDEA: สมุดสะสมตรา (eki stamp) — ติ๊กแล้วจังหวัดถูก "ประทับ" สีบนแผนที่
+   PICTURE: แผนที่ญี่ปุ่นตรงกลาง ใหญ่ เต็มกรอบ
+   COLOUR and TYPE: กระดาษวาชิขาว หมึกซูมิ ตราสีชาดเป็นสีเน้น / Shippori Mincho + IBM Plex Sans Thai
+   LAYOUT: 3 คอลัมน์ ภูมิภาคซ้าย–แผนที่กลาง–ภูมิภาคขวา; มือถือ: แผนที่ก่อน แล้วรายการ */
+:root{color-scheme:light dark;
+  --bg:light-dark(#faf7f1,#14130f);--paper:light-dark(#ffffff,#1d1b17);--ink:light-dark(#1b1a17,#efe9dd);
+  --mute:light-dark(#6d675c,#a39b8c);--line:light-dark(#e6dfd2,#34302a);--land:light-dark(#e9e3d7,#2c2924);
+  --stroke:light-dark(#faf7f1,#14130f);--seal:#d23a2a}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif;overflow-x:clip}
+header{padding:28px max(4vw,16px) 10px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:end;justify-content:space-between;max-width:1400px;margin:0 auto}
+h1{font:700 clamp(30px,4vw,46px)/1.05 "Shippori Mincho",serif;margin:0;text-wrap:balance}
+h1 small{display:block;font:600 15px/1.4 "IBM Plex Sans",sans-serif;color:var(--mute);margin-top:8px}
+.score{display:flex;align-items:center;gap:14px}
+.seal{width:76px;height:76px;border-radius:50%;border:3px solid var(--seal);color:var(--seal);display:grid;place-items:center;text-align:center;line-height:1;transform:rotate(-8deg)}
+.seal b{font:700 26px "Shippori Mincho",serif;display:block}.seal span{font-size:12px}
+.bar{width:min(260px,50vw)}.bar .t{height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.bar .f{height:100%;background:var(--seal);width:0;transition:width .4s}
+.bar p{margin:6px 0 0;font-size:14px;color:var(--mute)}
+.tools{max-width:1400px;margin:0 auto;padding:4px max(4vw,16px) 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search]{font:inherit;font-size:16px;padding:9px 14px;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);flex:1 1 220px;max-width:340px}
+button{font:inherit;font-size:15px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--mute)}
+:focus-visible{outline:3px solid var(--seal);outline-offset:2px}
+main{max-width:1400px;margin:0 auto;padding:16px max(4vw,16px) 40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.1fr) minmax(0,1fr);gap:20px;align-items:start}
+.col{display:grid;gap:14px}
+.region{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px 8px}
+.region h2{margin:0 0 6px;font-size:16px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.region h2 i{width:12px;height:12px;border-radius:50%;background:var(--c);flex:none}
+.region h2 em{font-style:normal;margin-left:auto;font-size:13px;color:var(--mute);font-weight:400;white-space:nowrap}
+.region h2 .all{min-height:30px;padding:0 10px;font-size:12px;border-radius:8px}
+.region ul{list-style:none;margin:0;padding:0}
+.region li label{display:flex;align-items:center;gap:10px;min-height:38px;padding:2px 6px;border-radius:8px;cursor:pointer}
+.region li label:hover{background:var(--land)}
+.region li.hl label{background:color-mix(in srgb,var(--c) 22%,transparent)}
+.region li.hide{display:none}
+.region input{appearance:none;width:22px;height:22px;border:2px solid var(--line);border-radius:6px;margin:0;flex:none;display:grid;place-items:center;cursor:pointer;background:var(--paper)}
+.region input:checked{background:var(--c);border-color:var(--c)}
+.region input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.region .jp{color:var(--mute);font-size:13px;margin-left:auto}
+.region.closed ul{display:none}
+.mapbox{position:sticky;top:12px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:12px}
+.cap{display:flex;justify-content:space-between;gap:10px;font-size:14px;color:var(--mute);padding:2px 6px 6px;min-height:28px}
+.cap b{color:var(--ink)}
+.fig{position:relative;aspect-ratio:1/1;max-height:78vh;margin:0 auto}
+.fig svg{position:absolute;inset:0;width:100%;height:100%}
+.fig path,.fig rect{fill:var(--land);stroke:var(--stroke);stroke-width:.6;cursor:pointer;transition:fill .25s}
+.fig .tile text{font-size:11px;fill:var(--mute);pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.fig .on>path,.fig .on>rect,.fig path.on{fill:var(--c)}
+.fig .on text{fill:#fff;font-weight:700}
+.fig .hov>path,.fig .hov>rect,.fig path.hov{fill:color-mix(in srgb,var(--c) 55%,var(--land))}
+.fig .on.hov>path,.fig .on.hov>rect,.fig path.on.hov{fill:color-mix(in srgb,var(--c) 80%,#000)}
+.inset{fill:none;stroke:var(--mute);stroke-dasharray:4 4;stroke-width:1;pointer-events:none}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mute);padding:8px 6px 2px}
+.legend span{display:flex;align-items:center;gap:6px}.legend i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.note{font-size:13px;color:var(--mute);padding:6px 6px 0;margin:0}
+.dlg{position:fixed;inset:0;background:rgb(0 0 0/.4);display:none;place-items:center;padding:16px;z-index:5}
+.dlg.open{display:grid}.dlg div{background:var(--paper);border-radius:16px;padding:22px;max-width:360px}
+.dlg p{margin:0 0 16px}.dlg .row{display:flex;gap:10px;justify-content:flex-end}
+.danger{background:var(--seal);border-color:var(--seal);color:#fff}
+@media(max-width:1000px){main{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.mapbox{position:static;grid-column:1/-1;order:-1}}
+@media(max-width:600px){main{grid-template-columns:minmax(0,1fr)}.seal{width:62px;height:62px}.seal b{font-size:21px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Japan’s 47 Prefectures<small>Tick the prefectures you’ve visited — or tap them on the map</small></h1>
+  <div class="score">
+    <div class="seal"><div><b id="cnt">0</b><span>/ 47</span></div></div>
+    <div class="bar"><div class="t"><div class="f" id="fill"></div></div><p id="pct">No prefectures visited yet</p></div>
+  </div>
+</header>
+<div class="tools">
+  <input type="search" id="q" placeholder="Search prefecture (English / 日本語)" aria-label="Search prefecture">
+  <button id="reset">Clear all</button>
+</div>
+<main>
+  <div class="col" id="left"></div>
+  <section class="mapbox" aria-label="Map of Japan">
+    <div class="cap"><span id="hover">Hover a prefecture to see its name</span><span id="mapmode"></span></div>
+    <div class="fig" id="fig"><svg id="map" role="img" aria-label="Map of Japan’s prefectures"></svg></div>
+    <div class="legend" id="legend"></div>
+    <p class="note" id="note"></p>
+  </section>
+  <div class="col" id="right"></div>
+</main>
+<div class="dlg" id="dlg" role="dialog" aria-modal="true"><div><p>Clear the whole checklist?</p><div class="row"><button id="no">Cancel</button><button class="danger" id="yes">Clear</button></div></div></div>
+
+<script>
+{
+const REGIONS=[
+ {k:'hokkaido',th:'Hokkaido',jp:'北海道',c:'#4a8fd0'},
+ {k:'tohoku',th:'Tohoku',jp:'東北',c:'#2f9e74'},
+ {k:'kanto',th:'Kanto',jp:'関東',c:'#d9971a'},
+ {k:'chubu',th:'Chubu',jp:'中部',c:'#7fae2e'},
+ {k:'kansai',th:'Kansai',jp:'近畿',c:'#d23a2a'},
+ {k:'chugoku',th:'Chugoku',jp:'中国',c:'#b8509a'},
+ {k:'shikoku',th:'Shikoku',jp:'四国',c:'#1fa3ad'},
+ {k:'kyushu',th:'Kyushu & Okinawa',jp:'九州・沖縄',c:'#e0702e'}];
+// [รหัส JIS, ไทย, 日本, English, ภูมิภาค, คอลัมน์, แถว (แผนที่สำรองแบบช่อง)]
+const P=[
+[1,'ฮกไกโด','北海道','Hokkaido',0,13,0],[2,'อาโอโมริ','青森','Aomori',1,12,1],[3,'อิวาเตะ','岩手','Iwate',1,12,2],
+[4,'มิยางิ','宮城','Miyagi',1,12,3],[5,'อากิตะ','秋田','Akita',1,11,2],[6,'ยามากาตะ','山形','Yamagata',1,11,3],
+[7,'ฟุกุชิมะ','福島','Fukushima',1,11,4],[8,'อิบารากิ','茨城','Ibaraki',2,12,5],[9,'โทจิงิ','栃木','Tochigi',2,11,5],
+[10,'กุมมะ','群馬','Gunma',2,10,5],[11,'ไซตามะ','埼玉','Saitama',2,10,6],[12,'ชิบะ','千葉','Chiba',2,12,6],
+[13,'โตเกียว','東京','Tokyo',2,11,6],[14,'คานางาวะ','神奈川','Kanagawa',2,10,7],[15,'นีงาตะ','新潟','Niigata',3,10,4],
+[16,'โทยามะ','富山','Toyama',3,9,4],[17,'อิชิกาวะ','石川','Ishikawa',3,8,4],[18,'ฟุกุอิ','福井','Fukui',3,7,5],
+[19,'ยามานาชิ','山梨','Yamanashi',3,9,6],[20,'นางาโนะ','長野','Nagano',3,9,5],[21,'กิฟุ','岐阜','Gifu',3,8,5],
+[22,'ชิซุโอกะ','静岡','Shizuoka',3,9,7],[23,'ไอจิ','愛知','Aichi',3,8,6],[24,'มิเอะ','三重','Mie',4,7,7],
+[25,'ชิงะ','滋賀','Shiga',4,7,6],[26,'เกียวโต','京都','Kyoto',4,6,6],[27,'โอซากะ','大阪','Osaka',4,5,7],
+[28,'เฮียวโงะ','兵庫','Hyogo',4,5,6],[29,'นาระ','奈良','Nara',4,6,7],[30,'วากายามะ','和歌山','Wakayama',4,6,8],
+[31,'ทตโตริ','鳥取','Tottori',5,4,6],[32,'ชิมาเนะ','島根','Shimane',5,3,6],[33,'โอกายามะ','岡山','Okayama',5,4,7],
+[34,'ฮิโรชิมะ','広島','Hiroshima',5,3,7],[35,'ยามางุจิ','山口','Yamaguchi',5,2,7],[36,'โทกุชิมะ','徳島','Tokushima',6,4,9],
+[37,'คางาวะ','香川','Kagawa',6,4,8],[38,'เอฮิเมะ','愛媛','Ehime',6,3,8],[39,'โคจิ','高知','Kochi',6,3,9],
+[40,'ฟุกุโอกะ','福岡','Fukuoka',7,1,8],[41,'ซางะ','佐賀','Saga',7,0,8],[42,'นางาซากิ','長崎','Nagasaki',7,0,9],
+[43,'คุมาโมโตะ','熊本','Kumamoto',7,1,9],[44,'โออิตะ','大分','Oita',7,2,8],[45,'มิยาซากิ','宮崎','Miyazaki',7,2,9],
+[46,'คาโกชิมะ','鹿児島','Kagoshima',7,1,10],[47,'โอกินาวะ','沖縄','Okinawa',7,0,11]
+].map(([id,th,jp,en,r,x,y])=>({id,th,jp,en,r,x,y}));
+const byId=Object.fromEntries(P.map(p=>[p.id,p]));
+const KEY='jp-prefecture-checklist-v1';
+let done=new Set();
+try{done=new Set(JSON.parse(localStorage.getItem(KEY)||'[]'))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...done]))}catch(e){}};
+const $=s=>document.querySelector(s);
+const svg=$('#map');let shapes={}; // id -> svg element(s)
+
+// ---------- รายการเช็คลิสต์ ----------
+function regionHTML(ri){
+  const R=REGIONS[ri],list=P.filter(p=>p.r===ri);
+  return `<div class="region" data-r="${ri}" style="--c:${R.c}">
+   <h2><i></i>${R.th} <span style="color:var(--mute);font-weight:400;font-size:13px">${R.jp}</span><em data-cnt="${ri}"></em><button class="all" data-all="${ri}">All</button></h2>
+   <ul>${list.map(p=>`<li data-id="${p.id}" data-s="${(p.th+p.jp+p.en).toLowerCase()}"><label><input type="checkbox" id="c${p.id}" data-id="${p.id}">${p.en}<span class="jp">${p.jp}</span></label></li>`).join('')}</ul></div>`;
+}
+$('#left').innerHTML=[0,1,2,3].map(regionHTML).join('');
+$('#right').innerHTML=[4,5,6,7].map(regionHTML).join('');
+$('#legend').innerHTML=REGIONS.map(R=>`<span style="--c:${R.c}"><i></i>${R.th}</span>`).join('');
+
+function toggle(id,val){
+  if(val===undefined)val=!done.has(id);
+  val?done.add(id):done.delete(id);
+}
+function render(){
+  for(const p of P){
+    const on=done.has(p.id);
+    const cb=document.getElementById('c'+p.id);if(cb)cb.checked=on;
+    (shapes[p.id]||[]).forEach(el=>el.classList.toggle('on',on));
+  }
+  REGIONS.forEach((R,ri)=>{
+    const list=P.filter(p=>p.r===ri),n=list.filter(p=>done.has(p.id)).length;
+    $(`[data-cnt="${ri}"]`).textContent=`${n}/${list.length}`;
+    $(`[data-all="${ri}"]`).textContent=n===list.length?'None':'All';
+  });
+  const n=done.size;
+  $('#cnt').textContent=n;$('#fill').style.width=(n/47*100)+'%';
+  $('#pct').textContent=n===0?'No prefectures visited yet':n===47?'All 47 prefectures visited!':`${Math.round(n/47*100)}% visited — ${47-n} to go`;
+  save();
+}
+document.addEventListener('change',e=>{
+  const id=+e.target.dataset.id;if(!id)return;toggle(id,e.target.checked);render();
+});
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-all]');
+  if(a){e.stopPropagation();const ri=+a.dataset.all,list=P.filter(p=>p.r===ri),all=list.every(p=>done.has(p.id));
+    list.forEach(p=>toggle(p.id,!all));render();return}
+  const h=e.target.closest('.region h2');if(h)h.parentElement.classList.toggle('closed');
+});
+$('#q').addEventListener('input',e=>{
+  const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.region li').forEach(li=>li.classList.toggle('hide',!!q&&!li.dataset.s.includes(q)));
+  if(q)document.querySelectorAll('.region').forEach(r=>r.classList.remove('closed'));
+});
+$('#reset').onclick=()=>$('#dlg').classList.add('open');
+$('#no').onclick=()=>$('#dlg').classList.remove('open');
+$('#yes').onclick=()=>{done.clear();render();$('#dlg').classList.remove('open')};
+
+// ---------- แผนที่ ----------
+function hover(id,on){
+  const p=byId[id];if(!p)return;
+  (shapes[id]||[]).forEach(el=>el.classList.toggle('hov',on));
+  const li=document.querySelector(`.region li[data-id="${id}"]`);if(li)li.classList.toggle('hl',on);
+  $('#hover').innerHTML=on?`<b>${p.en}</b> ${p.jp} · ${REGIONS[p.r].th}${done.has(id)?' · ✓ visited':''}`:'Hover a prefecture to see its name';
+}
+function wire(el,id){
+  const p=byId[id];el.style.setProperty('--c',REGIONS[p.r].c);
+  (shapes[id]=shapes[id]||[]).push(el);
+  el.addEventListener('click',()=>{toggle(id);render();hover(id,true)});
+  el.addEventListener('mouseenter',()=>hover(id,true));
+  el.addEventListener('mouseleave',()=>hover(id,false));
+  const t=document.createElementNS('http://www.w3.org/2000/svg','title');t.textContent=p.en+' '+p.jp;el.appendChild(t);
+}
+// ชี้จากรายการ → ไฮไลต์บนแผนที่
+document.addEventListener('mouseover',e=>{const li=e.target.closest('.region li');if(li)hover(+li.dataset.id,true)});
+document.addEventListener('mouseout',e=>{const li=e.target.closest('.region li');if(li&&!li.contains(e.relatedTarget))hover(+li.dataset.id,false)});
+
+const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
+  .replace(/\b(prefecture|ken|fu|to|do|metropolis)\b/g,'').replace(/[^a-z]/g,'').replace(/^hokkai$/,'hokkaido').replace(/ou/g,'o').replace(/oh/g,'o');
+const nameIdx=Object.fromEntries(P.map(p=>[norm(p.en),p.id]));
+function matchId(...keys){
+  for(const k of keys){
+    if(k==null)continue;
+    const s=String(k);
+    if(byId[s.replace(/[^\d]/g,'')]&&/^\D{0,4}\d{1,2}$/.test(s))return +s.replace(/[^\d]/g,'');
+    const jp=P.find(p=>s.startsWith(p.jp));if(jp)return jp.id;
+    const n=nameIdx[norm(s)];if(n)return n;
+  }
+  return null;
+}
+
+// 1) แผนที่จริงจากแพ็กเกจ @svg-maps/japan (CDN)
+async function trySvgMaps(){
+  const m=await import('https://cdn.jsdelivr.net/npm/@svg-maps/japan@1/+esm');
+  const d=m.default||m;if(!d.locations)throw 0;
+  const ok=d.locations.filter(l=>matchId(l.id,l.name));
+  if(ok.length<45)throw 0;
+  svg.setAttribute('viewBox',d.viewBox);
+  svg.innerHTML=d.locations.map(l=>`<path d="${l.path}" data-id="${matchId(l.id,l.name)||''}"/>`).join('');
+  svg.querySelectorAll('path').forEach(el=>{const id=+el.dataset.id;if(id)wire(el,id);else el.style.pointerEvents='none'});
+  return 'Map: @svg-maps/japan';
+}
+// 2) GeoJSON จาก dataofjapan/land (ใช้ได้เมื่อเปิดจากเว็บของเราเอง เช่น GitHub Pages)
+async function tryGeo(){
+  const r=await fetch('https://cdn.jsdelivr.net/gh/dataofjapan/land@master/japan.geojson');if(!r.ok)throw 0;
+  const g=await r.json(),k=Math.cos(36*Math.PI/180);
+  const feats=g.features.map(f=>{
+    const pr=f.properties||{},id=matchId(pr.id,pr.nam_ja,pr.nam,pr.name);
+    const polys=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.coordinates;
+    const rings=[];
+    for(const poly of polys){
+      const [lo,la]=poly[0][0];
+      if(id===47){if(lo>129||lo<126.5)continue}       // โอกินาวะ: เอาเกาะหลัก แล้วย้ายเข้ากรอบเล็ก
+      else if(lo<128.5||lo>146||la<30.8)continue;      // ตัดเกาะห่างไกล (โอกาซาวาระ ฯลฯ)
+      rings.push(poly.map(ring=>ring.map(([x,y])=>id===47?[x+4.6,y+15.2]:[x,y])));
+    }
+    return {id,rings};
+  }).filter(f=>f.id&&f.rings.length);
+  if(feats.length<45)throw 0;
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
+  feats.forEach(f=>f.rings.forEach(p=>p.forEach(r=>r.forEach(([x,y])=>{x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}))));
+  const S=1000/Math.max((x1-x0)*k,y1-y0),W=(x1-x0)*k*S,H=(y1-y0)*S;
+  const px=([x,y])=>((x-x0)*k*S).toFixed(1)+','+((y1-y)*S).toFixed(1);
+  svg.setAttribute('viewBox',`-10 -10 ${W+20} ${H+20}`);
+  // กรอบโอกินาวะ
+  const ok=feats.filter(f=>f.id===47).flatMap(f=>f.rings.flat(2));
+  let box='';if(ok.length){const xs=ok.map(p=>(p[0]-x0)*k*S),ys=ok.map(p=>(y1-p[1])*S);
+    box=`<rect class="inset" x="${Math.min(...xs)-12}" y="${Math.min(...ys)-12}" width="${Math.max(...xs)-Math.min(...xs)+24}" height="${Math.max(...ys)-Math.min(...ys)+24}" rx="8"/>`}
+  svg.innerHTML=feats.map(f=>`<path data-id="${f.id}" d="${f.rings.map(p=>p.map(r=>'M'+r.map(px).join('L')+'Z').join('')).join('')}"/>`).join('')+box;
+  svg.querySelectorAll('path').forEach(el=>wire(el,+el.dataset.id));
+  return 'Map: dataofjapan/land';
+}
+// 3) แผนที่สำรองแบบช่อง (ไม่ต้องใช้อินเทอร์เน็ต)
+function tiles(){
+  const s=60,g=4;
+  svg.setAttribute('viewBox',`-6 -6 ${14*s+12} ${12*s+12}`);
+  svg.innerHTML=P.map(p=>`<g class="tile" data-id="${p.id}"><rect x="${p.x*s}" y="${p.y*s}" width="${s-g}" height="${s-g}" rx="9"/><text x="${p.x*s+(s-g)/2}" y="${p.y*s+(s-g)/2}">${p.jp}</text></g>`).join('');
+  svg.querySelectorAll('.tile').forEach(el=>wire(el,+el.dataset.id));
+  return 'Tile map (the detailed map couldn’t load)';
+}
+(async()=>{
+  let mode;
+  for(const f of [trySvgMaps,tryGeo]){try{shapes={};mode=await f();break}catch(e){shapes={}}}
+  if(!mode)mode=tiles();
+  $('#note').textContent=mode+' · Your checklist is saved in this browser';
+  render();
+})();
+render();
+}
+</script>
+</body>
+</html>
